@@ -566,6 +566,41 @@ export function planMatches( planKey: string | Plan, query: PlanMatchesQuery = {
 	return false;
 }
 
+/**
+ * Checks if two plans match specified criteria.
+ * Compares plans based on the provided criteria such as 'term', 'group', and 'type'.
+ * @param {string} plan1Key - The key of the first plan.
+ * @param {string} plan2Key - The key of the second plan.
+ * @param {(keyof PlanMatchesQuery)[]} matchCriteria - An array of criteria to compare plans.
+ * @returns {boolean} - True if the plans match the criteria, otherwise false.
+ * @example
+ *  // Check if two plans with keys 'PLAN_PERSONAL_2_YEARS' and 'PLAN_PERSONAL' have the same 'type'.
+ *  const result = comparePlans('PLAN_PERSONAL_2_YEARS', 'PLAN_PERSONAL',  ['type']);
+ *  // result => true
+ */
+export function comparePlans(
+	plan1Key: string,
+	plan2Key: string,
+	matchCriteria: ( keyof PlanMatchesQuery )[]
+): boolean {
+	const plan1 = getPlan( plan1Key );
+	const plan2 = getPlan( plan2Key );
+
+	if ( ! plan1 || ! plan2 ) {
+		return false;
+	}
+
+	if (
+		( ! matchCriteria.includes( 'term' ) || plan1.term === plan2.term ) &&
+		( ! matchCriteria.includes( 'group' ) || plan1.group === plan2.group ) &&
+		( ! matchCriteria.includes( 'type' ) || plan1.type === plan2.type )
+	) {
+		return true;
+	}
+
+	return false;
+}
+
 export function calculateMonthlyPriceForPlan( planSlug: string, termPrice: number ): number {
 	const plan = getPlan( planSlug );
 	if ( ! plan ) {

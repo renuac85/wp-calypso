@@ -120,6 +120,7 @@ import {
 	isWooExpressMediumPlan,
 	isWooExpressSmallPlan,
 	isWooExpressPlusPlan,
+	comparePlans,
 } from '../src/index';
 
 jest.mock( '@automattic/calypso-config', () => {
@@ -1381,6 +1382,90 @@ describe( 'planMatches - business', () => {
 		expect( planMatches( PLAN_JETPACK_BUSINESS_MONTHLY, { term: TERM_ANNUALLY } ) ).toEqual(
 			false
 		);
+	} );
+} );
+
+describe( 'comparePlans', () => {
+	test( 'Should return correct result based on compared plans for single criteria', () => {
+		/**
+		 * Comparing PLAN_BUSINESS_2_YEARS  and PLAN_BUSINESS_3_YEARS
+		 */
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_BUSINESS_3_YEARS, [ 'type' ] ) ).toEqual(
+			true
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_BUSINESS_3_YEARS, [ 'group' ] ) ).toEqual(
+			true
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_BUSINESS_3_YEARS, [ 'term' ] ) ).toEqual(
+			false
+		);
+
+		/**
+		 * Comparing PLAN_BUSINESS_2_YEARS  and PLAN_PERSONAL_2_YEARS
+		 */
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_PERSONAL_2_YEARS, [ 'type' ] ) ).toEqual(
+			false
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_PERSONAL_2_YEARS, [ 'group' ] ) ).toEqual(
+			true
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_PERSONAL_2_YEARS, [ 'term' ] ) ).toEqual(
+			true
+		);
+
+		/**
+		 * Comparing PLAN_BUSINESS_2_YEARS  and PLAN_PERSONAL_2_YEARS
+		 */
+		expect(
+			comparePlans( PLAN_JETPACK_BUSINESS_MONTHLY, PLAN_BUSINESS_MONTHLY, [ 'type' ] )
+		).toEqual( true );
+		expect(
+			comparePlans( PLAN_JETPACK_BUSINESS_MONTHLY, PLAN_BUSINESS_MONTHLY, [ 'group' ] )
+		).toEqual( false );
+		expect(
+			comparePlans( PLAN_JETPACK_BUSINESS_MONTHLY, PLAN_BUSINESS_MONTHLY, [ 'term' ] )
+		).toEqual( true );
+	} );
+
+	test( 'Should return correct result based on compared plans for multiple criteria', () => {
+		/**
+		 * Comparing PLAN_BUSINESS_2_YEARS  and PLAN_BUSINESS_3_YEARS
+		 */
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_BUSINESS_3_YEARS, [ 'type' ] ) ).toEqual(
+			true
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_BUSINESS_3_YEARS, [ 'group' ] ) ).toEqual(
+			true
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_BUSINESS_3_YEARS, [ 'term' ] ) ).toEqual(
+			false
+		);
+
+		/**
+		 * Comparing PLAN_BUSINESS_2_YEARS  and PLAN_PERSONAL_2_YEARS
+		 */
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_PERSONAL_2_YEARS, [ 'type' ] ) ).toEqual(
+			false
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_PERSONAL_2_YEARS, [ 'group' ] ) ).toEqual(
+			true
+		);
+		expect( comparePlans( PLAN_BUSINESS_2_YEARS, PLAN_PERSONAL_2_YEARS, [ 'term' ] ) ).toEqual(
+			true
+		);
+
+		/**
+		 * Comparing PLAN_JETPACK_BUSINESS_MONTHLY  and PLAN_JETPACK_BUSINESS_MONTHLY
+		 */
+		expect(
+			comparePlans( PLAN_JETPACK_BUSINESS_MONTHLY, PLAN_BUSINESS_MONTHLY, [ 'type' ] )
+		).toEqual( true );
+		expect(
+			comparePlans( PLAN_JETPACK_BUSINESS_MONTHLY, PLAN_BUSINESS_MONTHLY, [ 'group' ] )
+		).toEqual( false );
+		expect(
+			comparePlans( PLAN_JETPACK_BUSINESS_MONTHLY, PLAN_BUSINESS_MONTHLY, [ 'term' ] )
+		).toEqual( true );
 	} );
 } );
 
