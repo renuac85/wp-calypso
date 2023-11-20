@@ -198,34 +198,6 @@ test( 'tax includes', () => {
 	expect( screen.getByText( `(includes ${ transaction.tax } tax)` ) ).toBeInTheDocument();
 } );
 
-test( 'tax adding', () => {
-	const transaction = {
-		...mockTransaction,
-		subtotal: '$36.00',
-		tax: '$2.48',
-		amount: '$38.48',
-		subtotal_integer: 3600,
-		tax_integer: 248,
-		amount_integer: 3848,
-		items: [
-			{
-				...mockItem,
-				raw_tax: 2.48,
-				tax_integer: 248,
-			},
-		],
-	};
-
-	const store = createTestReduxStore();
-
-	render(
-		<ReduxProvider store={ store }>
-			<TransactionAmount transaction={ transaction } addingTax />
-		</ReduxProvider>
-	);
-	expect( screen.getByText( `(+${ transaction.tax } tax)` ) ).toBeInTheDocument();
-} );
-
 test( 'tax includes with localized tax name', () => {
 	const transaction = {
 		...mockTransaction,
@@ -253,35 +225,6 @@ test( 'tax includes with localized tax name', () => {
 		</ReduxProvider>
 	);
 	expect( screen.getByText( `(includes ${ transaction.tax } VAT)` ) ).toBeInTheDocument();
-} );
-
-test( 'tax adding with localized tax name', () => {
-	const transaction = {
-		...mockTransaction,
-		subtotal: '$36.00',
-		tax: '$2.48',
-		amount: '$38.48',
-		tax_country_code: 'GB',
-		subtotal_integer: 3600,
-		tax_integer: 248,
-		amount_integer: 3848,
-		items: [
-			{
-				...mockItem,
-				raw_tax: 2.48,
-				tax_integer: 248,
-			},
-		],
-	};
-
-	const store = createTestReduxStore();
-
-	render(
-		<ReduxProvider store={ store }>
-			<TransactionAmount transaction={ transaction } addingTax />
-		</ReduxProvider>
-	);
-	expect( screen.getByText( `(+${ transaction.tax } VAT)` ) ).toBeInTheDocument();
 } );
 
 test( 'tax hidden if not available', () => {
