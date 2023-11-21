@@ -308,6 +308,9 @@ function ReceiptItemDiscounts( { item }: { item: BillingTransactionItem } ) {
  * overrides.
  */
 function getReceiptItemOriginalCost( item: BillingTransactionItem ): number {
+	if ( item.type === 'refund' ) {
+		return item.raw_amount;
+	}
 	const originalCostOverrides = item.cost_overrides.filter(
 		( override ) => override.does_override_original_cost
 	);
