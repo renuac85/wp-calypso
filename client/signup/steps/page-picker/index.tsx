@@ -8,6 +8,7 @@ import styled from '@emotion/styled';
 import { useTranslate } from 'i18n-calypso';
 import { useEffect, useMemo, useState } from 'react';
 import InfoPopover from 'calypso/components/info-popover';
+import { triggerGuidesForStep } from 'calypso/lib/guides/trigger-guides-for-step';
 import { getStripeConfiguration } from 'calypso/lib/store-transactions';
 import CalypsoShoppingCartProvider from 'calypso/my-sites/checkout/calypso-shopping-cart-provider';
 import PurchaseModal from 'calypso/my-sites/checkout/purchase-modal';
@@ -452,6 +453,7 @@ function DIFMPagePicker( props: StepProps ) {
 
 	useEffect( () => {
 		dispatch( saveSignupStep( { stepName } ) );
+		triggerGuidesForStep( flowName, stepName );
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
