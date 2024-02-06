@@ -7,9 +7,9 @@ import wrapSettingsForm from '../wrap-settings-form';
 import SitePrivacyForm from './form';
 
 export interface Fields {
-	blog_public: string;
-	wpcom_coming_soon: string;
-	wpcom_public_coming_soon: string;
+	blog_public: number;
+	wpcom_coming_soon: number;
+	wpcom_public_coming_soon: number;
 }
 
 interface Props {
@@ -32,9 +32,9 @@ const getFormSettings = ( settings?: Fields ) => {
 	const { blog_public, wpcom_coming_soon, wpcom_public_coming_soon } = settings;
 
 	return {
-		blog_public,
-		wpcom_coming_soon,
-		wpcom_public_coming_soon,
+		blog_public: parseInt( blog_public, 10 ),
+		wpcom_coming_soon: parseInt( wpcom_coming_soon, 10 ),
+		wpcom_public_coming_soon: parseInt( wpcom_public_coming_soon, 10 ),
 	};
 };
 

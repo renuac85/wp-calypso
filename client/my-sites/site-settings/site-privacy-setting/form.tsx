@@ -138,9 +138,9 @@ const SitePrivacyForm = connectComponent(
 		const translate = useTranslate();
 		const { globalStylesInUse, shouldLimitGlobalStyles } = useSiteGlobalStylesStatus( siteId );
 
-		const blogPublic = parseInt( fields.blog_public, 10 );
-		const wpcomComingSoon = 1 === parseInt( fields.wpcom_coming_soon, 10 );
-		const wpcomPublicComingSoon = 1 === parseInt( fields.wpcom_public_coming_soon, 10 );
+		const blogPublic = fields.blog_public;
+		const wpcomComingSoon = 1 === fields.wpcom_coming_soon;
+		const wpcomPublicComingSoon = 1 === fields.wpcom_public_coming_soon;
 		// isPrivateAndUnlaunched means it is an unlaunched coming soon v1 site
 		const isPrivateAndUnlaunched = -1 === blogPublic && isUnlaunchedSite;
 		const isNonAtomicJetpackSite = siteIsJetpack && ! siteIsAtomic;
@@ -159,7 +159,7 @@ const SitePrivacyForm = connectComponent(
 			blog_public,
 			wpcom_coming_soon,
 			wpcom_public_coming_soon,
-		} ) => {
+		}: Fields ) => {
 			trackEvent( `Set blog_public to ${ blog_public }` );
 			trackEvent( `Set wpcom_coming_soon to ${ wpcom_coming_soon }` );
 			trackEvent( `Set wpcom_public_coming_soon to ${ wpcom_public_coming_soon }` );
