@@ -703,17 +703,12 @@ export class SiteSettingsFormGeneral extends Component {
 	}
 
 	privacySettings() {
-		const { isRequestingSettings, isSavingSettings, isP2HubSite } = this.props;
+		const { isP2HubSite } = this.props;
 		if ( isP2HubSite ) {
 			return <></>;
 		}
 
-		return (
-			<SitePrivacySetting
-				isDisabled={ isRequestingSettings || isSavingSettings }
-				isSaving={ isSavingSettings }
-			/>
-		);
+		return <SitePrivacySetting />;
 	}
 
 	// Add settings for enhanced ownership: ability to enable locked mode and add the name of a person who will inherit the site.
