@@ -44,13 +44,13 @@ type OwnProps = {
 
 type ConnectedProps = {
 	selectedSite: SiteDetails | null | undefined;
-	siteIsJetpack: boolean;
-	siteSlug: string;
+	siteIsJetpack: boolean | null;
+	siteSlug: string | null;
 	hasSitePreviewLink: boolean;
 	isAtomicAndEditingToolkitDeactivated: boolean;
 	isComingSoon: boolean;
 	isUnlaunchedSite: boolean;
-	isWPForTeamsSite: boolean;
+	isWPForTeamsSite: boolean | null;
 	isWpcomStagingSite: boolean;
 };
 
@@ -124,6 +124,7 @@ const SitePrivacyFormNotice = ( { selectedSite, siteSlug }: SitePrivacyFormNotic
 
 const SitePrivacyForm = connectComponent(
 	( {
+		// OwnProps
 		fields,
 		siteId,
 		siteIsAtomic,
@@ -133,6 +134,7 @@ const SitePrivacyForm = connectComponent(
 		eventTracker,
 		trackEvent,
 
+		// ConnectedProps
 		selectedSite,
 		siteIsJetpack,
 		siteSlug,
