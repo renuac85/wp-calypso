@@ -21,29 +21,29 @@ import isSiteWPForTeams from 'calypso/state/selectors/is-site-wpforteams';
 import isUnlaunchedSite from 'calypso/state/selectors/is-unlaunched-site';
 import siteHasFeature from 'calypso/state/selectors/site-has-feature';
 import { useSiteGlobalStylesStatus } from 'calypso/state/sites/hooks/use-site-global-styles-status';
-import { isJetpackSite } from 'calypso/state/sites/selectors';
+import { getSiteOption, isJetpackSite } from 'calypso/state/sites/selectors';
 import {
 	getSelectedSite,
 	getSelectedSiteId,
 	getSelectedSiteSlug,
-	getSiteOption,
 } from 'calypso/state/ui/selectors';
 import type { Fields } from './index';
 import type { SiteDetails } from '@automattic/data-stores';
 import type { IAppState } from 'calypso/state/types';
 
-interface OwnProps {
+type OwnProps = {
 	fields: Fields;
-	siteId: string;
+	siteId: number;
 	siteIsAtomic: boolean;
 	updateFields: ( fields: Fields ) => void;
 	isRequestingSettings: boolean;
-	eventTracker: () => void;
-	trackEvent: () => void;
-}
+	isSavingSettings: boolean;
+	eventTracker: ( message: string ) => void;
+	trackEvent: ( message: string ) => void;
+};
 
-interface ConnectedProps {
-	selectedSite: SiteDetails | null;
+type ConnectedProps = {
+	selectedSite: SiteDetails | null | undefined;
 	siteIsJetpack: boolean;
 	siteSlug: string;
 	hasSitePreviewLink: boolean;
@@ -52,12 +52,12 @@ interface ConnectedProps {
 	isUnlaunchedSite: boolean;
 	isWPForTeamsSite: boolean;
 	isWpcomStagingSite: boolean;
-}
+};
 
-type Props = OwnProps & ConnectedProps;
+type SitePrivacyFormProps = OwnProps & ConnectedProps;
 
 const connectComponent = connect( ( state: IAppState ) => {
-	const siteId = getSelectedSiteId( state );
+	const siteId = getSelectedSiteId( state ) || -1;
 
 	return {
 		selectedSite: getSelectedSite( state ),
@@ -74,7 +74,12 @@ const connectComponent = connect( ( state: IAppState ) => {
 	};
 } );
 
-const SitePrivacyFormNotice = ( { selectedSite, siteSlug } ) => {
+interface SitePrivacyFormNoticeProps {
+	selectedSite: SiteDetails | null | undefined;
+	siteSlug: string;
+}
+
+const SitePrivacyFormNotice = ( { selectedSite, siteSlug }: SitePrivacyFormNoticeProps ) => {
 	const translate = useTranslate();
 	const upgradeUrl = `/plans/${ siteSlug }?plan=${ PLAN_PREMIUM }&feature=${ FEATURE_STYLE_CUSTOMIZATION }`;
 
@@ -95,9 +100,11 @@ const SitePrivacyFormNotice = ( { selectedSite, siteSlug } ) => {
 					</span>
 				</div>
 				<div className="site-settings__advanced-customization-notice-buttons">
-					<Button href={ selectedSite.URL } target="_blank">
-						{ translate( 'View site' ) }
-					</Button>
+					{ selectedSite && (
+						<Button href={ selectedSite.URL } target="_blank">
+							{ translate( 'View site' ) }
+						</Button>
+					) }
 					<Button
 						className="is-primary"
 						href={ upgradeUrl }
@@ -117,13 +124,14 @@ const SitePrivacyFormNotice = ( { selectedSite, siteSlug } ) => {
 
 const SitePrivacyForm = connectComponent(
 	( {
-		eventTracker,
 		fields,
 		siteId,
 		siteIsAtomic,
-		trackEvent,
 		updateFields,
 		isRequestingSettings,
+		isSavingSettings,
+		eventTracker,
+		trackEvent,
 
 		selectedSite,
 		siteIsJetpack,
@@ -134,13 +142,13 @@ const SitePrivacyForm = connectComponent(
 		isUnlaunchedSite,
 		isWPForTeamsSite,
 		isWpcomStagingSite,
-	}: Props ) => {
+	}: SitePrivacyFormProps ) => {
 		const translate = useTranslate();
 		const { globalStylesInUse, shouldLimitGlobalStyles } = useSiteGlobalStylesStatus( siteId );
 
-		const blogPublic = fields.blog_public;
-		const wpcomComingSoon = 1 === fields.wpcom_coming_soon;
-		const wpcomPublicComingSoon = 1 === fields.wpcom_public_coming_soon;
+		const blogPublic = Number( fields.blog_public );
+		const wpcomComingSoon = 1 === Number( fields.wpcom_coming_soon );
+		const wpcomPublicComingSoon = 1 === Number( fields.wpcom_public_coming_soon );
 		// isPrivateAndUnlaunched means it is an unlaunched coming soon v1 site
 		const isPrivateAndUnlaunched = -1 === blogPublic && isUnlaunchedSite;
 		const isNonAtomicJetpackSite = siteIsJetpack && ! siteIsAtomic;
@@ -182,6 +190,7 @@ const SitePrivacyForm = connectComponent(
 									} ) }
 								>
 									<FormRadio
+										className={ undefined }
 										name="blog_public"
 										value="0"
 										checked={ isAnyComingSoonEnabled }
@@ -202,10 +211,10 @@ const SitePrivacyForm = connectComponent(
 										'Your site is hidden from visitors behind a "Coming Soon" notice until it is ready for viewing.'
 									) }
 								</FormSettingExplanation>
-								{ showPreviewLink && (
+								{ showPreviewLink && selectedSite && (
 									<div className="site-settings__visibility-label is-checkbox">
 										<SitePreviewLink
-											siteUrl={ site.URL }
+											siteUrl={ selectedSite.URL }
 											siteId={ siteId }
 											disabled={ ! isAnyComingSoonEnabled || isSavingSettings }
 											forceOff={ ! isAnyComingSoonEnabled }
@@ -219,6 +228,7 @@ const SitePrivacyForm = connectComponent(
 						<>
 							<FormLabel className="site-settings__visibility-label is-public">
 								<FormRadio
+									className={ undefined }
 									name="blog_public"
 									value="1"
 									checked={ isPublicChecked }
@@ -230,7 +240,9 @@ const SitePrivacyForm = connectComponent(
 										} )
 									}
 									disabled={ isRequestingSettings }
-									onClick={ eventTracker( 'Clicked Site Visibility Radio Button' ) }
+									onClick={ () => {
+										eventTracker( 'Clicked Site Visibility Radio Button' );
+									} }
 									label={ translate( 'Public' ) }
 								/>
 							</FormLabel>
@@ -263,7 +275,9 @@ const SitePrivacyForm = connectComponent(
 										} )
 									}
 									disabled={ isRequestingSettings }
-									onClick={ eventTracker( 'Clicked Site Visibility Radio Button' ) }
+									onClick={ () => {
+										eventTracker( 'Clicked Site Visibility Radio Button' );
+									} }
 								/>
 								<span>{ translate( 'Discourage search engines from indexing this site' ) }</span>
 								<FormSettingExplanation>
@@ -278,6 +292,7 @@ const SitePrivacyForm = connectComponent(
 						<>
 							<FormLabel className="site-settings__visibility-label is-private">
 								<FormRadio
+									className={ undefined }
 									name="blog_public"
 									value="-1"
 									checked={
@@ -292,7 +307,9 @@ const SitePrivacyForm = connectComponent(
 										} )
 									}
 									disabled={ isRequestingSettings }
-									onClick={ eventTracker( 'Clicked Site Visibility Radio Button' ) }
+									onClick={ () => {
+										eventTracker( 'Clicked Site Visibility Radio Button' );
+									} }
 									label={ translate( 'Private' ) }
 								/>
 							</FormLabel>

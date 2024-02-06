@@ -14,8 +14,8 @@ export interface Fields {
 
 interface Props {
 	fields: Fields;
-	handleSubmitForm: () => void;
-	siteId: string;
+	handleSubmitForm: ( event: React.FormEvent< HTMLFormElement > ) => void;
+	siteId: number;
 	siteIsAtomic: boolean;
 	updateFields: ( fields: Fields ) => void;
 	isRequestingSettings: boolean;
@@ -32,9 +32,9 @@ const getFormSettings = ( settings?: Fields ) => {
 	const { blog_public, wpcom_coming_soon, wpcom_public_coming_soon } = settings;
 
 	return {
-		blog_public: parseInt( blog_public, 10 ),
-		wpcom_coming_soon: parseInt( wpcom_coming_soon, 10 ),
-		wpcom_public_coming_soon: parseInt( wpcom_public_coming_soon, 10 ),
+		blog_public,
+		wpcom_coming_soon,
+		wpcom_public_coming_soon,
 	};
 };
 
@@ -78,6 +78,7 @@ const SitePrivacySetting = ( {
 					siteIsAtomic={ siteIsAtomic }
 					updateFields={ updateFields }
 					isRequestingSettings={ isRequestingSettings }
+					isSavingSettings={ isSavingSettings }
 					eventTracker={ eventTracker }
 					trackEvent={ trackEvent }
 				/>
