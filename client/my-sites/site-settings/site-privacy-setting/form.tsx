@@ -76,7 +76,7 @@ const connectComponent = connect( ( state: IAppState ) => {
 
 interface SitePrivacyFormNoticeProps {
 	selectedSite: SiteDetails | null | undefined;
-	siteSlug: string;
+	siteSlug: string | null;
 }
 
 const SitePrivacyFormNotice = ( { selectedSite, siteSlug }: SitePrivacyFormNoticeProps ) => {
