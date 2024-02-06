@@ -26,11 +26,35 @@ import {
 	getSelectedSite,
 	getSelectedSiteId,
 	getSelectedSiteSlug,
+	getSiteOption,
 } from 'calypso/state/ui/selectors';
+import type { Fields } from './index';
+import type { SiteDetails } from '@automattic/data-stores';
+import type { IAppState } from 'calypso/state/types';
 
-interface SitePrivacyFormProps {
+interface OwnProps {
 	fields: Fields;
+	siteId: string;
+	siteIsAtomic: boolean;
+	updateFields: ( fields: Fields ) => void;
+	isRequestingSettings: boolean;
+	eventTracker: () => void;
+	trackEvent: () => void;
 }
+
+interface ConnectedProps {
+	selectedSite: SiteDetails | null;
+	siteIsJetpack: boolean;
+	siteSlug: string;
+	hasSitePreviewLink: boolean;
+	isAtomicAndEditingToolkitDeactivated: boolean;
+	isComingSoon: boolean;
+	isUnlaunchedSite: boolean;
+	isWPForTeamsSite: boolean;
+	isWpcomStagingSite: boolean;
+}
+
+type Props = OwnProps & ConnectedProps;
 
 const connectComponent = connect( ( state: IAppState ) => {
 	const siteId = getSelectedSiteId( state );
@@ -110,7 +134,7 @@ const SitePrivacyForm = connectComponent(
 		isUnlaunchedSite,
 		isWPForTeamsSite,
 		isWpcomStagingSite,
-	}: SitePrivacyFormProps ) => {
+	}: Props ) => {
 		const translate = useTranslate();
 		const { globalStylesInUse, shouldLimitGlobalStyles } = useSiteGlobalStylesStatus( siteId );
 

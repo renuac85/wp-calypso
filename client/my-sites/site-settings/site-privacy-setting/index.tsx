@@ -6,11 +6,22 @@ import SettingsSectionHeader from 'calypso/my-sites/site-settings/settings-secti
 import wrapSettingsForm from '../wrap-settings-form';
 import SitePrivacyForm from './form';
 
-interface Fields {}
+export interface Fields {
+	blog_public: string;
+	wpcom_coming_soon: string;
+	wpcom_public_coming_soon: string;
+}
 
 interface Props {
-	isRequestingSettings;
-	isSavingSettings;
+	fields: Fields;
+	handleSubmitForm: () => void;
+	siteId: string;
+	siteIsAtomic: boolean;
+	updateFields: ( fields: Fields ) => void;
+	isRequestingSettings: boolean;
+	isSavingSettings: boolean;
+	eventTracker: () => void;
+	trackEvent: () => void;
 }
 
 const getFormSettings = ( settings?: Fields ) => {
@@ -42,6 +53,7 @@ const SitePrivacySetting = ( {
 
 	return (
 		<>
+			{ /* @ts-expect-error SettingsSectionHeader is not typed and is causing errors */ }
 			<SettingsSectionHeader
 				id="site-privacy-settings"
 				disabled={ isRequestingSettings || isSavingSettings }
