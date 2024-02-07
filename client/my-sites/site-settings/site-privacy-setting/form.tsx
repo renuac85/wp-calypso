@@ -14,14 +14,8 @@ import FormFieldset from 'calypso/components/forms/form-fieldset';
 import FormRadio from 'calypso/components/forms/form-radio';
 import FormSettingExplanation from 'calypso/components/forms/form-setting-explanation';
 import SitePreviewLink from 'calypso/components/site-preview-link';
-import isSiteComingSoon from 'calypso/state/selectors/is-site-coming-soon';
-import isAtomicSite from 'calypso/state/selectors/is-site-wpcom-atomic';
-import isSiteWpcomStaging from 'calypso/state/selectors/is-site-wpcom-staging';
-import isSiteWPForTeams from 'calypso/state/selectors/is-site-wpforteams';
-import isUnlaunchedSite from 'calypso/state/selectors/is-unlaunched-site';
 import siteHasFeature from 'calypso/state/selectors/site-has-feature';
 import { useSiteGlobalStylesStatus } from 'calypso/state/sites/hooks/use-site-global-styles-status';
-import { getSiteOption, isJetpackSite } from 'calypso/state/sites/selectors';
 import {
 	getSelectedSite,
 	getSelectedSiteId,
@@ -34,24 +28,24 @@ import type { IAppState } from 'calypso/state/types';
 type OwnProps = {
 	fields: Fields;
 	siteId: number;
-	siteIsAtomic: boolean;
 	updateFields: ( fields: Fields ) => void;
+	isAtomicAndEditingToolkitDeactivated: boolean;
+	isComingSoon: boolean;
 	isRequestingSettings: boolean;
 	isSavingSettings: boolean;
+	isUnlaunchedSite: boolean;
+	isWPForTeamsSite: boolean | null;
+	isWpcomStagingSite: boolean;
+	siteIsAtomic: boolean | null;
+	siteIsJetpack: boolean | null;
 	eventTracker: ( message: string ) => void;
 	trackEvent: ( message: string ) => void;
 };
 
 type ConnectedProps = {
 	selectedSite: SiteDetails | null | undefined;
-	siteIsJetpack: boolean | null;
 	siteSlug: string | null;
 	hasSitePreviewLink: boolean;
-	isAtomicAndEditingToolkitDeactivated: boolean;
-	isComingSoon: boolean;
-	isUnlaunchedSite: boolean;
-	isWPForTeamsSite: boolean | null;
-	isWpcomStagingSite: boolean;
 };
 
 type SitePrivacyFormProps = OwnProps & ConnectedProps;
@@ -61,16 +55,8 @@ const connectComponent = connect( ( state: IAppState ) => {
 
 	return {
 		selectedSite: getSelectedSite( state ),
-		siteIsJetpack: isJetpackSite( state, siteId ),
 		siteSlug: getSelectedSiteSlug( state ),
 		hasSitePreviewLink: siteHasFeature( state, siteId, WPCOM_FEATURES_SITE_PREVIEW_LINKS ),
-		isAtomicAndEditingToolkitDeactivated:
-			isAtomicSite( state, siteId ) &&
-			getSiteOption( state, siteId, 'editing_toolkit_is_active' ) === false,
-		isComingSoon: isSiteComingSoon( state, siteId ),
-		isUnlaunchedSite: isUnlaunchedSite( state, siteId ),
-		isWPForTeamsSite: isSiteWPForTeams( state, siteId ),
-		isWpcomStagingSite: isSiteWpcomStaging( state, siteId ),
 	};
 } );
 
@@ -128,22 +114,22 @@ const SitePrivacyForm = connectComponent(
 		fields,
 		siteId,
 		siteIsAtomic,
+		siteIsJetpack,
 		updateFields,
+		isAtomicAndEditingToolkitDeactivated,
+		isComingSoon,
 		isRequestingSettings,
 		isSavingSettings,
+		isUnlaunchedSite,
+		isWPForTeamsSite,
+		isWpcomStagingSite,
 		eventTracker,
 		trackEvent,
 
 		// ConnectedProps
 		selectedSite,
-		siteIsJetpack,
 		siteSlug,
 		hasSitePreviewLink,
-		isAtomicAndEditingToolkitDeactivated,
-		isComingSoon,
-		isUnlaunchedSite,
-		isWPForTeamsSite,
-		isWpcomStagingSite,
 	}: SitePrivacyFormProps ) => {
 		const translate = useTranslate();
 		const { globalStylesInUse, shouldLimitGlobalStyles } = useSiteGlobalStylesStatus( siteId );

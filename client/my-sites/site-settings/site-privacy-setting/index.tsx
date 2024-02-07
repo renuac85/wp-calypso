@@ -3,7 +3,6 @@ import { useTranslate } from 'i18n-calypso';
 import InfoPopover from 'calypso/components/info-popover';
 import InlineSupportLink from 'calypso/components/inline-support-link';
 import SettingsSectionHeader from 'calypso/my-sites/site-settings/settings-section-header';
-import wrapSettingsForm from '../wrap-settings-form';
 import SitePrivacyForm from './form';
 
 export interface Fields {
@@ -12,43 +11,41 @@ export interface Fields {
 	wpcom_public_coming_soon: number;
 }
 
-interface Props {
+interface SitePrivacySettingProps {
 	fields: Fields;
-	handleSubmitForm: ( event: React.FormEvent< HTMLFormElement > ) => void;
 	siteId: number;
-	siteIsAtomic: boolean;
+	handleSubmitForm: ( event: React.FormEvent< HTMLFormElement > ) => void;
 	updateFields: ( fields: Fields ) => void;
+	isAtomicAndEditingToolkitDeactivated: boolean;
+	isComingSoon: boolean;
 	isRequestingSettings: boolean;
 	isSavingSettings: boolean;
+	isUnlaunchedSite: boolean;
+	isWPForTeamsSite: boolean | null;
+	isWpcomStagingSite: boolean;
+	siteIsAtomic: boolean | null;
+	siteIsJetpack: boolean | null;
 	eventTracker: () => void;
 	trackEvent: () => void;
 }
-
-const getFormSettings = ( settings?: Fields ) => {
-	if ( ! settings ) {
-		return {};
-	}
-
-	const { blog_public, wpcom_coming_soon, wpcom_public_coming_soon } = settings;
-
-	return {
-		blog_public,
-		wpcom_coming_soon,
-		wpcom_public_coming_soon,
-	};
-};
 
 const SitePrivacySetting = ( {
 	fields,
 	handleSubmitForm,
 	siteId,
-	siteIsAtomic,
 	updateFields,
+	isAtomicAndEditingToolkitDeactivated,
+	isComingSoon,
 	isRequestingSettings,
 	isSavingSettings,
+	isUnlaunchedSite,
+	isWPForTeamsSite,
+	isWpcomStagingSite,
+	siteIsAtomic,
+	siteIsJetpack,
 	eventTracker,
 	trackEvent,
-}: Props ) => {
+}: SitePrivacySettingProps ) => {
 	const translate = useTranslate();
 
 	return (
@@ -75,10 +72,16 @@ const SitePrivacySetting = ( {
 				<SitePrivacyForm
 					fields={ fields }
 					siteId={ siteId }
-					siteIsAtomic={ siteIsAtomic }
 					updateFields={ updateFields }
+					isAtomicAndEditingToolkitDeactivated={ isAtomicAndEditingToolkitDeactivated }
+					isComingSoon={ isComingSoon }
 					isRequestingSettings={ isRequestingSettings }
 					isSavingSettings={ isSavingSettings }
+					isUnlaunchedSite={ isUnlaunchedSite }
+					isWPForTeamsSite={ isWPForTeamsSite }
+					isWpcomStagingSite={ isWpcomStagingSite }
+					siteIsAtomic={ siteIsAtomic }
+					siteIsJetpack={ siteIsJetpack }
 					eventTracker={ eventTracker }
 					trackEvent={ trackEvent }
 				/>
@@ -87,4 +90,4 @@ const SitePrivacySetting = ( {
 	);
 };
 
-export default wrapSettingsForm( getFormSettings )( SitePrivacySetting );
+export default SitePrivacySetting;

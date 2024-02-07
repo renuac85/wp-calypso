@@ -703,12 +703,48 @@ export class SiteSettingsFormGeneral extends Component {
 	}
 
 	privacySettings() {
-		const { isP2HubSite } = this.props;
+		const {
+			fields,
+			handleSubmitForm,
+			updateFields,
+			isAtomicAndEditingToolkitDeactivated,
+			isComingSoon,
+			isP2HubSite,
+			isRequestingSettings,
+			isSavingSettings,
+			isUnlaunchedSite: propsIsUnlaunchedSite,
+			isWPForTeamsSite,
+			isWpcomStagingSite,
+			siteId,
+			siteIsAtomic,
+			siteIsJetpack,
+			eventTracker,
+			trackEvent,
+		} = this.props;
+
 		if ( isP2HubSite ) {
 			return <></>;
 		}
 
-		return <SitePrivacySetting />;
+		return (
+			<SitePrivacySetting
+				siteId={ siteId }
+				fields={ fields }
+				handleSubmitForm={ handleSubmitForm }
+				updateFields={ updateFields }
+				isAtomicAndEditingToolkitDeactivated={ isAtomicAndEditingToolkitDeactivated }
+				isComingSoon={ isComingSoon }
+				isRequestingSettings={ isRequestingSettings }
+				isSavingSettings={ isSavingSettings }
+				isUnlaunchedSite={ propsIsUnlaunchedSite }
+				isWPForTeamsSite={ isWPForTeamsSite }
+				isWpcomStagingSite={ isWpcomStagingSite }
+				siteIsAtomic={ siteIsAtomic }
+				siteIsJetpack={ siteIsJetpack }
+				eventTracker={ eventTracker }
+				trackEvent={ trackEvent }
+			/>
+		);
 	}
 
 	// Add settings for enhanced ownership: ability to enable locked mode and add the name of a person who will inherit the site.

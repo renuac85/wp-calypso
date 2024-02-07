@@ -32,6 +32,7 @@ import timezonesReducer from 'calypso/state/timezones/reducer';
 import uiReducer from 'calypso/state/ui/reducer';
 import { renderWithProvider } from 'calypso/test-helpers/testing-library';
 import { SiteSettingsFormGeneral } from '../form-general';
+import SitePrivacySetting from '../site-privacy-setting';
 
 moment.tz = {
 	guess: () => moment(),
@@ -386,6 +387,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 0,
 				},
 			};
+
 			const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...testProps } /> );
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -404,8 +406,9 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 0,
 				},
 			};
+
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />
+				<SitePrivacySetting { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -430,8 +433,9 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 1,
 				},
 			};
+
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />
+				<SitePrivacySetting { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -456,8 +460,9 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 0,
 				},
 			};
+
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />
+				<SitePrivacySetting { ...testProps } />
 			);
 			// Staging sites shouldn't ever show the 'Launch site' container.
 			expect(
@@ -478,8 +483,9 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 0,
 				},
 			};
+
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />
+				<SitePrivacySetting { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -511,8 +517,9 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 1,
 				},
 			};
+
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />
+				<SitePrivacySetting { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -534,8 +541,9 @@ describe( 'SiteSettingsFormGeneral', () => {
 					blog_public: 0,
 				},
 			};
+
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />
+				<SitePrivacySetting { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -732,7 +740,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 					isAtomicAndEditingToolkitDeactivated: false,
 				};
 
-				const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...newProps } /> );
+				const { container } = renderWithRedux( <SitePrivacySetting { ...newProps } /> );
 				expect(
 					container.querySelectorAll( '.site-settings__visibility-label.is-coming-soon' )
 				).toHaveLength( 1 );
@@ -743,7 +751,8 @@ describe( 'SiteSettingsFormGeneral', () => {
 					...props,
 					isAtomicAndEditingToolkitDeactivated: true,
 				};
-				const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...newProps } /> );
+
+				const { container } = renderWithRedux( <SitePrivacySetting { ...newProps } /> );
 				expect(
 					container.querySelectorAll( '.site-settings__visibility-label.is-coming-soon' )
 				).toHaveLength( 0 );
@@ -759,7 +768,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 					isAtomicAndEditingToolkitDeactivated: true,
 				};
 				const { getByLabelText, container } = renderWithRedux(
-					<SiteSettingsFormGeneral { ...newProps } />
+					<SitePrivacySetting { ...newProps } />
 				);
 				expect( container.querySelector( '.site-settings__visibility-label.is-coming-soon' ) ).toBe(
 					null
