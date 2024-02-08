@@ -6,7 +6,7 @@ import InlineSupportLink from 'calypso/components/inline-support-link';
 import SettingsSectionHeader from 'calypso/my-sites/site-settings/settings-section-header';
 import isSiteWpcomStaging from 'calypso/state/selectors/is-site-wpcom-staging';
 import isSiteWPForTeams from 'calypso/state/selectors/is-site-wpforteams';
-import SitePrivacyForm from './form';
+import SiteSettingPrivacyForm from './form';
 
 export interface Fields {
 	blog_public: number;
@@ -14,7 +14,7 @@ export interface Fields {
 	wpcom_public_coming_soon: number;
 }
 
-interface SitePrivacySettingProps {
+interface SiteSettingPrivacyProps {
 	fields: Fields;
 	siteId: number;
 	handleSubmitForm: ( event: React.FormEvent< HTMLFormElement > ) => void;
@@ -30,7 +30,7 @@ interface SitePrivacySettingProps {
 	trackEvent: () => void;
 }
 
-const SitePrivacySetting = ( {
+const SiteSettingPrivacy = ( {
 	fields,
 	handleSubmitForm,
 	siteId,
@@ -44,7 +44,7 @@ const SitePrivacySetting = ( {
 	siteIsJetpack,
 	eventTracker,
 	trackEvent,
-}: SitePrivacySettingProps ) => {
+}: SiteSettingPrivacyProps ) => {
 	const translate = useTranslate();
 	const isWpcomStagingSite = useSelector( ( state ) => isSiteWpcomStaging( state, siteId ) );
 	const isWPForTeamsSite = useSelector( ( state ) => isSiteWPForTeams( state, siteId ) );
@@ -70,7 +70,7 @@ const SitePrivacySetting = ( {
 				) }
 			/>
 			<Card>
-				<SitePrivacyForm
+				<SiteSettingPrivacyForm
 					fields={ fields }
 					siteId={ siteId }
 					updateFields={ updateFields }
@@ -91,4 +91,4 @@ const SitePrivacySetting = ( {
 	);
 };
 
-export default SitePrivacySetting;
+export default SiteSettingPrivacy;

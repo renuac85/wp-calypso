@@ -48,7 +48,7 @@ type ConnectedProps = {
 	hasSitePreviewLink: boolean;
 };
 
-type SitePrivacyFormProps = OwnProps & ConnectedProps;
+type SiteSettingPrivacyFormProps = OwnProps & ConnectedProps;
 
 const connectComponent = connect( ( state: IAppState ) => {
 	const siteId = getSelectedSiteId( state ) || -1;
@@ -60,12 +60,12 @@ const connectComponent = connect( ( state: IAppState ) => {
 	};
 } );
 
-interface SitePrivacyFormNoticeProps {
+interface SiteSettingPrivacyFormNoticeProps {
 	selectedSite: SiteDetails | null | undefined;
 	siteSlug: string | null;
 }
 
-const SitePrivacyFormNotice = ( { selectedSite, siteSlug }: SitePrivacyFormNoticeProps ) => {
+const SiteSettingPrivacyFormNotice = ( { selectedSite, siteSlug }: SiteSettingPrivacyFormNoticeProps ) => {
 	const translate = useTranslate();
 	const upgradeUrl = `/plans/${ siteSlug }?plan=${ PLAN_PREMIUM }&feature=${ FEATURE_STYLE_CUSTOMIZATION }`;
 
@@ -108,7 +108,7 @@ const SitePrivacyFormNotice = ( { selectedSite, siteSlug }: SitePrivacyFormNotic
 	);
 };
 
-const SitePrivacyForm = connectComponent(
+const SiteSettingPrivacyForm = connectComponent(
 	( {
 		// OwnProps
 		fields,
@@ -130,7 +130,7 @@ const SitePrivacyForm = connectComponent(
 		selectedSite,
 		siteSlug,
 		hasSitePreviewLink,
-	}: SitePrivacyFormProps ) => {
+	}: SiteSettingPrivacyFormProps ) => {
 		const translate = useTranslate();
 		const { globalStylesInUse, shouldLimitGlobalStyles } = useSiteGlobalStylesStatus( siteId );
 
@@ -170,7 +170,7 @@ const SitePrivacyForm = connectComponent(
 						! isAtomicAndEditingToolkitDeactivated && (
 							<>
 								{ shouldShowPremiumStylesNotice && (
-									<SitePrivacyFormNotice selectedSite={ selectedSite } siteSlug={ siteSlug } />
+									<SiteSettingPrivacyFormNotice selectedSite={ selectedSite } siteSlug={ siteSlug } />
 								) }
 								<FormLabel
 									className={ classnames( 'site-settings__visibility-label is-coming-soon', {
@@ -314,4 +314,4 @@ const SitePrivacyForm = connectComponent(
 	}
 );
 
-export default SitePrivacyForm;
+export default SiteSettingPrivacyForm;

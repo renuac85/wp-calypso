@@ -39,7 +39,7 @@ import { preventWidows } from 'calypso/lib/formatting';
 import scrollToAnchor from 'calypso/lib/scroll-to-anchor';
 import { domainManagementEdit } from 'calypso/my-sites/domains/paths';
 import SettingsSectionHeader from 'calypso/my-sites/site-settings/settings-section-header';
-import SitePrivacySetting from 'calypso/my-sites/site-settings/site-privacy-setting';
+import SiteSettingPrivacy from 'calypso/my-sites/site-settings/site-setting-privacy';
 import isAtomicSite from 'calypso/state/selectors/is-site-automated-transfer';
 import isSiteComingSoon from 'calypso/state/selectors/is-site-coming-soon';
 import isSiteP2Hub from 'calypso/state/selectors/is-site-p2-hub';
@@ -725,7 +725,7 @@ export class SiteSettingsFormGeneral extends Component {
 		}
 
 		return (
-			<SitePrivacySetting
+			<SiteSettingPrivacy
 				siteId={ siteId }
 				fields={ fields }
 				handleSubmitForm={ handleSubmitForm }
