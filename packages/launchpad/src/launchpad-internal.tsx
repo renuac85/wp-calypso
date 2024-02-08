@@ -7,6 +7,7 @@ import type { Task } from './types';
 import type { SiteDetails, UseLaunchpadOptions } from '@automattic/data-stores';
 
 export interface LaunchpadInternalProps {
+	flow?: string;
 	site?: SiteDetails | null;
 	siteSlug: string | null;
 	checklistSlug: string | null;
@@ -23,6 +24,7 @@ export interface LaunchpadInternalProps {
  * Please use the main Launchpad component whenever possible.
  */
 const LaunchpadInternal = ( {
+	flow,
 	site,
 	siteSlug,
 	checklistSlug,
@@ -56,6 +58,7 @@ const LaunchpadInternal = ( {
 		checklistSlug,
 		siteIntent: site?.options?.site_intent,
 		context: launchpadContext,
+		flow,
 	} );
 
 	const itemClickHandler = ( task: Task ) => {
