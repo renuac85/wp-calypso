@@ -1,8 +1,10 @@
 import { isEnabled } from '@automattic/calypso-config';
 import {
+	PLAN_BUSINESS,
 	PLAN_BUSINESS_MONTHLY,
 	PLAN_PERSONAL,
 	WPCOM_FEATURES_PREMIUM_THEMES_UNLIMITED,
+	isFreePlanProduct,
 } from '@automattic/calypso-products';
 import { Button } from '@automattic/components';
 import {
@@ -368,7 +370,10 @@ const UnifiedDesignPickerStep: Step = ( { navigation, flow, stepName } ) => {
 		) || [];
 	const marketplaceProductSlug =
 		marketplaceThemeProducts.length !== 0
-			? getPreferredBillingCycleProductSlug( marketplaceThemeProducts )
+			? getPreferredBillingCycleProductSlug(
+					marketplaceThemeProducts,
+					site?.plan && ! isFreePlanProduct( site?.plan ) ? site.plan : undefined
+			  )
 			: null;
 
 	const selectedMarketplaceProduct =
@@ -469,7 +474,9 @@ const UnifiedDesignPickerStep: Step = ( { navigation, flow, stepName } ) => {
 		if ( themeHasBundle ) {
 			plan = 'business-bundle';
 		} else if ( selectedDesign?.is_externally_managed ) {
-			plan = ! isExternallyManagedThemeAvailable ? PLAN_BUSINESS_MONTHLY : '';
+			const businessPlan =
+				selectedMarketplaceProduct.product_term === 'year' ? PLAN_BUSINESS : PLAN_BUSINESS_MONTHLY;
+			plan = ! isExternallyManagedThemeAvailable ? businessPlan : '';
 		} else if ( isEnabled( 'themes/tiers' ) && selectedDesign?.design_tier === PERSONAL_THEME ) {
 			plan = PLAN_PERSONAL;
 		} else {
