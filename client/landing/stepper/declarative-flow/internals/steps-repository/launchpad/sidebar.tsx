@@ -280,6 +280,7 @@ const Sidebar = ( {
 						taskFilter={ () => enhancedTasks || [] }
 						launchpadContext="onboarding"
 						makeLastTaskPrimaryAction={ true }
+						enableAutoTracking
 					/>
 					{ showPlansModal && site?.ID && (
 						<RecurringPaymentsPlanAddEditModal
