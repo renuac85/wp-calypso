@@ -1,9 +1,11 @@
 /**
  * @jest-environment jsdom
  */
+import { recordTracksEvent } from '@automattic/calypso-analytics';
 import config from '@automattic/calypso-config';
 import { Site } from '@automattic/data-stores';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useDispatch } from '@wordpress/data';
 import nock from 'nock';
 import React from 'react';
@@ -17,6 +19,7 @@ import { renderWithProvider } from 'calypso/test-helpers/testing-library';
 import Sidebar from '../sidebar';
 import { defaultSiteDetails, buildSiteDetails, buildDomainResponse } from './lib/fixtures';
 
+jest.mock( '@automattic/calypso-analytics' );
 jest.mock( 'calypso/state/sites/hooks/use-site-global-styles-status', () => ( {
 	useSiteGlobalStylesStatus: () => ( {
 		shouldLimitGlobalStyles: false,
@@ -233,6 +236,14 @@ describe( 'Sidebar', () => {
 
 		const progressBar = screen.getByRole( 'progressbar' );
 		expect( progressBar ).toBeVisible();
+	} );
+
+	it( 'shows a launch title', async () => {
+		const siteDetails = buildSiteDetails( {} );
+		renderSidebar( props, siteDetails );
+		const task = screen.getByRole( 'button', { name: 'Foo Task 1' } );
+		await userEvent.click( task );
+		expect( recordTracksEvent ).toHaveBeenCalled();
 	} );
 
 	describe( 'when no custom domain has been purchased', () => {
