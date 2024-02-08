@@ -713,8 +713,6 @@ export class SiteSettingsFormGeneral extends Component {
 			isRequestingSettings,
 			isSavingSettings,
 			isUnlaunchedSite: propsIsUnlaunchedSite,
-			isWPForTeamsSite,
-			isWpcomStagingSite,
 			siteId,
 			siteIsAtomic,
 			siteIsJetpack,
@@ -737,8 +735,6 @@ export class SiteSettingsFormGeneral extends Component {
 				isRequestingSettings={ isRequestingSettings }
 				isSavingSettings={ isSavingSettings }
 				isUnlaunchedSite={ propsIsUnlaunchedSite }
-				isWPForTeamsSite={ isWPForTeamsSite }
-				isWpcomStagingSite={ isWpcomStagingSite }
 				siteIsAtomic={ siteIsAtomic }
 				siteIsJetpack={ siteIsJetpack }
 				eventTracker={ eventTracker }

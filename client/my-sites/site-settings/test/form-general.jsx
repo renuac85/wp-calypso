@@ -33,6 +33,7 @@ import uiReducer from 'calypso/state/ui/reducer';
 import { renderWithProvider } from 'calypso/test-helpers/testing-library';
 import { SiteSettingsFormGeneral } from '../form-general';
 import SitePrivacySetting from '../site-privacy-setting';
+import SitePrivacyForm from '../site-privacy-setting/form';
 
 moment.tz = {
 	guess: () => moment(),
@@ -461,13 +462,26 @@ describe( 'SiteSettingsFormGeneral', () => {
 				},
 			};
 
-			const { container, getByLabelText } = renderWithRedux(
-				<SitePrivacySetting { ...testProps } />
-			);
+			const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...testProps } /> );
 			// Staging sites shouldn't ever show the 'Launch site' container.
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
 			).toBe( 0 );
+		} );
+
+		test( 'Atomic Staging Site, Unlaunched, Privacy Setting', () => {
+			testProps = {
+				...atomicStagingProps,
+				isComingSoon: true,
+				isUnlaunchedSite: true,
+				fields: {
+					wpcom_public_coming_soon: 1,
+					wpcom_coming_soon: 0,
+					blog_public: 0,
+				},
+			};
+
+			const { container, getByLabelText } = renderWithRedux( <SitePrivacyForm { ...testProps } /> );
 			expect( container.querySelectorAll( '[name="blog_public"]' ).length ).toBe( 3 );
 			expect( getByLabelText( 'Coming Soon' ) ).toBeChecked();
 		} );
@@ -484,12 +498,25 @@ describe( 'SiteSettingsFormGeneral', () => {
 				},
 			};
 
-			const { container, getByLabelText } = renderWithRedux(
-				<SitePrivacySetting { ...testProps } />
-			);
+			const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...testProps } /> );
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
 			).toBe( 0 );
+		} );
+
+		test( 'Atomic Staging Site, Coming Soon -> click Public, Privacy Setting', async () => {
+			testProps = {
+				...atomicStagingProps,
+				isComingSoon: true,
+				isUnlaunchedSite: false,
+				fields: {
+					wpcom_public_coming_soon: 1,
+					wpcom_coming_soon: 0,
+					blog_public: 0,
+				},
+			};
+
+			const { container, getByLabelText } = renderWithRedux( <SitePrivacyForm { ...testProps } /> );
 			expect( container.querySelectorAll( '[name="blog_public"]' ).length ).toBe( 3 );
 
 			const publicRadio = getByLabelText( 'Public' );
@@ -518,12 +545,25 @@ describe( 'SiteSettingsFormGeneral', () => {
 				},
 			};
 
-			const { container, getByLabelText } = renderWithRedux(
-				<SitePrivacySetting { ...testProps } />
-			);
+			const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...testProps } /> );
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
 			).toBe( 0 );
+		} );
+
+		test( 'Atomic Staging Site, Public, Privacy Setting', () => {
+			testProps = {
+				...atomicStagingProps,
+				isComingSoon: false,
+				isUnlaunchedSite: false,
+				fields: {
+					wpcom_public_coming_soon: 0,
+					wpcom_coming_soon: 0,
+					blog_public: 1,
+				},
+			};
+
+			const { container, getByLabelText } = renderWithRedux( <SitePrivacyForm { ...testProps } /> );
 			expect( container.querySelectorAll( '[name="blog_public"]' ).length ).toBe( 3 );
 			expect( getByLabelText( 'Coming Soon' ) ).not.toBeChecked();
 			expect( getByLabelText( 'Public' ) ).toBeChecked();
@@ -542,12 +582,25 @@ describe( 'SiteSettingsFormGeneral', () => {
 				},
 			};
 
-			const { container, getByLabelText } = renderWithRedux(
-				<SitePrivacySetting { ...testProps } />
-			);
+			const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...testProps } /> );
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
 			).toBe( 0 );
+		} );
+
+		test( 'Atomic Staging Site, Search Engines Discouraged, Privacy Setting', () => {
+			testProps = {
+				...atomicStagingProps,
+				isComingSoon: false,
+				isUnlaunchedSite: false,
+				fields: {
+					wpcom_public_coming_soon: 0,
+					wpcom_coming_soon: 0,
+					blog_public: 0,
+				},
+			};
+
+			const { container, getByLabelText } = renderWithRedux( <SitePrivacyForm { ...testProps } /> );
 			expect( container.querySelectorAll( '[name="blog_public"]' ).length ).toBe( 3 );
 			expect( getByLabelText( 'Coming Soon' ) ).not.toBeChecked();
 			expect( getByLabelText( 'Public' ) ).toBeChecked();

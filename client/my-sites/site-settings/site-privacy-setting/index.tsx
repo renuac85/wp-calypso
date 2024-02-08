@@ -1,8 +1,11 @@
 import { Card } from '@automattic/components';
 import { useTranslate } from 'i18n-calypso';
+import { useSelector } from 'react-redux';
 import InfoPopover from 'calypso/components/info-popover';
 import InlineSupportLink from 'calypso/components/inline-support-link';
 import SettingsSectionHeader from 'calypso/my-sites/site-settings/settings-section-header';
+import isSiteWpcomStaging from 'calypso/state/selectors/is-site-wpcom-staging';
+import isSiteWPForTeams from 'calypso/state/selectors/is-site-wpforteams';
 import SitePrivacyForm from './form';
 
 export interface Fields {
@@ -21,8 +24,6 @@ interface SitePrivacySettingProps {
 	isRequestingSettings: boolean;
 	isSavingSettings: boolean;
 	isUnlaunchedSite: boolean;
-	isWPForTeamsSite: boolean | null;
-	isWpcomStagingSite: boolean;
 	siteIsAtomic: boolean | null;
 	siteIsJetpack: boolean | null;
 	eventTracker: () => void;
@@ -39,14 +40,14 @@ const SitePrivacySetting = ( {
 	isRequestingSettings,
 	isSavingSettings,
 	isUnlaunchedSite,
-	isWPForTeamsSite,
-	isWpcomStagingSite,
 	siteIsAtomic,
 	siteIsJetpack,
 	eventTracker,
 	trackEvent,
 }: SitePrivacySettingProps ) => {
 	const translate = useTranslate();
+	const isWpcomStagingSite = useSelector( ( state ) => isSiteWpcomStaging( state, siteId ) );
+	const isWPForTeamsSite = useSelector( ( state ) => isSiteWPForTeams( state, siteId ) );
 
 	return (
 		<>
