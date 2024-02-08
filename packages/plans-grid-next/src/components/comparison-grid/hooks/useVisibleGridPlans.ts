@@ -1,5 +1,5 @@
-import { PlanSlug, comparePlans, isFreePlan } from '@automattic/calypso-products';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { getPlanClass } from '@automattic/calypso-products';
+import { useEffect, useMemo, useState } from 'react';
 import { usePlansGridContext } from '../../../grid-context';
 import { GridPlan } from '../../../types';
 
@@ -13,55 +13,38 @@ import { GridPlan } from '../../../types';
  *- Updates the local state with the most up-to-date plan order as required.
  * @returns The list of gridPlans in the accurate display configuration.
  */
-function useVisibleGridPlans(): [ GridPlan[], ( visibleGridPlans: PlanSlug[] ) => void ] {
+function useVisibleGridPlans(): {
+	visibleGridPlans: GridPlan[];
+	setVisibleGridPlans: ( visibleGridPlans: GridPlan[] ) => void;
+} {
 	const { gridPlansIndex, gridPlans } = usePlansGridContext();
-	const [ visibleGridPlanState, setVisibleGridPlans ] = useState< GridPlan[] >( gridPlans );
-
-	const refreshedVisibleGridPlans: GridPlan[] = useMemo( () => {
-		let newPlans: GridPlan[] = visibleGridPlanState;
-
+	const [ visibleGridPlans, setVisibleGridPlans ] = useState(
+		gridPlans.map( ( gridPlan ) => gridPlan )
+	);
+	const refreshedVisibleGridPlans = useMemo( () => {
+		let newPlans: GridPlan[] | undefined;
 		/**
 		 * If at least one planSlug in the visibleGridPlanState state is not present in the current gridPlansIndex,
 		 * it indicates that the visibleGridPlanState is now stale most probably due to a change in the interval.
 		 */
-		const isVisibleGridPlansStale = visibleGridPlanState.some(
-			( plan ) => ! gridPlansIndex[ plan.planSlug ]
-		);
-		if ( isVisibleGridPlansStale ) {
-			newPlans = visibleGridPlanState.map( ( previousPlan: GridPlan ) => {
-				const { planSlug: previousPlanSlug } = previousPlan;
-				if ( isFreePlan( previousPlanSlug ) ) {
-					return previousPlan;
-				}
-				const foundPlan = gridPlans.find( ( newPlan ) =>
-					comparePlans( previousPlanSlug, newPlan.planSlug, [ 'type' ] )
-				);
-				return foundPlan ?? previousPlan;
-			} );
+		const [ firstVisibleGridPlan ] = visibleGridPlans;
+		if ( ! gridPlansIndex[ firstVisibleGridPlan.planSlug ] ) {
+			newPlans = visibleGridPlans.map(
+				( stalePlan ) =>
+					gridPlans.find(
+						( newPlan ) => getPlanClass( newPlan.planSlug ) === getPlanClass( stalePlan.planSlug )
+					) ?? stalePlan
+			);
 		}
 		return newPlans;
-	}, [ gridPlans, gridPlansIndex, visibleGridPlanState ] );
+	}, [ gridPlans, gridPlansIndex, visibleGridPlans ] );
 
-	const isVisibleGridPlansStale = refreshedVisibleGridPlans.length > 0;
 	useEffect( () => {
-		if ( isVisibleGridPlansStale ) {
+		if ( refreshedVisibleGridPlans ) {
 			setVisibleGridPlans( refreshedVisibleGridPlans );
 		}
-	}, [ isVisibleGridPlansStale, refreshedVisibleGridPlans ] );
+	}, [ refreshedVisibleGridPlans ] );
 
-	const setVisibleGridPlansDisplay = useCallback(
-		( planSlugs: PlanSlug[] ) => {
-			setVisibleGridPlans( planSlugs.map( ( planSlug ) => gridPlansIndex[ planSlug ] ) );
-		},
-		[ gridPlansIndex, setVisibleGridPlans ]
-	);
-
-	let returnedVisibleGridPlans = visibleGridPlanState;
-	if ( isVisibleGridPlansStale ) {
-		returnedVisibleGridPlans = refreshedVisibleGridPlans;
-	}
-
-	return [ returnedVisibleGridPlans, setVisibleGridPlansDisplay ];
+	return { visibleGridPlans: refreshedVisibleGridPlans ?? visibleGridPlans, setVisibleGridPlans };
 }
-
 export default useVisibleGridPlans;
