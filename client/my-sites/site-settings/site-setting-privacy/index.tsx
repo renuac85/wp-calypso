@@ -75,7 +75,6 @@ const SiteSettingPrivacy = ( {
 			<Card>
 				<SiteSettingPrivacyForm
 					fields={ fields }
-					siteId={ siteId }
 					updateFields={ updateFields }
 					isAtomicAndEditingToolkitDeactivated={ isAtomicAndEditingToolkitDeactivated }
 					isComingSoon={ isComingSoon }
