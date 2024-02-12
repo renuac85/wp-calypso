@@ -4,9 +4,14 @@ import { useSelector } from 'react-redux';
 import InfoPopover from 'calypso/components/info-popover';
 import InlineSupportLink from 'calypso/components/inline-support-link';
 import SettingsSectionHeader from 'calypso/my-sites/site-settings/settings-section-header';
+import isSiteComingSoon from 'calypso/state/selectors/is-site-coming-soon';
 import isSiteWpcomStaging from 'calypso/state/selectors/is-site-wpcom-staging';
 import isSiteWPForTeams from 'calypso/state/selectors/is-site-wpforteams';
+import isUnlaunchedSite from 'calypso/state/selectors/is-unlaunched-site';
+import { isJetpackSite } from 'calypso/state/sites/selectors';
+import { getSelectedSiteId } from 'calypso/state/ui/selectors';
 import SiteSettingPrivacyForm from './form';
+import type { AppState } from 'calypso/types';
 
 export interface Fields {
 	blog_public: number;
@@ -16,16 +21,12 @@ export interface Fields {
 
 interface SiteSettingPrivacyProps {
 	fields: Fields;
-	siteId: number;
 	handleSubmitForm: ( event: React.FormEvent< HTMLFormElement > ) => void;
 	updateFields: ( fields: Fields ) => void;
 	isAtomicAndEditingToolkitDeactivated: boolean;
-	isComingSoon: boolean;
 	isRequestingSettings: boolean;
 	isSavingSettings: boolean;
-	isUnlaunchedSite: boolean;
 	siteIsAtomic: boolean | null;
-	siteIsJetpack: boolean | null;
 	eventTracker: () => void;
 	trackEvent: () => void;
 }
@@ -33,19 +34,19 @@ interface SiteSettingPrivacyProps {
 const SiteSettingPrivacy = ( {
 	fields,
 	handleSubmitForm,
-	siteId,
 	updateFields,
 	isAtomicAndEditingToolkitDeactivated,
-	isComingSoon,
 	isRequestingSettings,
 	isSavingSettings,
-	isUnlaunchedSite,
 	siteIsAtomic,
-	siteIsJetpack,
 	eventTracker,
 	trackEvent,
 }: SiteSettingPrivacyProps ) => {
 	const translate = useTranslate();
+	const siteId = useSelector( getSelectedSiteId ) || -1;
+	const siteIsJetpack = useSelector( ( state ) => isJetpackSite( state, siteId ) );
+	const isComingSoon = useSelector( ( state: AppState ) => isSiteComingSoon( state, siteId ) );
+	const isUnlaunched = useSelector( ( state: AppState ) => isUnlaunchedSite( state, siteId ) );
 	const isWpcomStagingSite = useSelector( ( state ) => isSiteWpcomStaging( state, siteId ) );
 	const isWPForTeamsSite = useSelector( ( state ) => isSiteWPForTeams( state, siteId ) );
 
@@ -78,7 +79,7 @@ const SiteSettingPrivacy = ( {
 					isComingSoon={ isComingSoon }
 					isRequestingSettings={ isRequestingSettings }
 					isSavingSettings={ isSavingSettings }
-					isUnlaunchedSite={ isUnlaunchedSite }
+					isUnlaunchedSite={ isUnlaunched }
 					isWPForTeamsSite={ isWPForTeamsSite }
 					isWpcomStagingSite={ isWpcomStagingSite }
 					siteIsAtomic={ siteIsAtomic }

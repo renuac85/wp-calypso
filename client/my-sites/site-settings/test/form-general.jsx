@@ -341,6 +341,17 @@ describe( 'SiteSettingsFormGeneral', () => {
 		} );
 
 		test( 'Jetpack Site, Public -> click Discourage Search Engines', async () => {
+			const { container } = renderWithRedux( <SiteSettingsFormGeneral { ...jetpackProps } />, {
+				ui: {
+					selectedSiteId: 1234,
+				},
+			} );
+			expect(
+				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
+			).toBe( 0 );
+		} );
+
+		test( 'Jetpack Site, Public -> click Discourage Search Engines, Privacy Setting', async () => {
 			testProps = {
 				...jetpackProps,
 				isComingSoon: false,
@@ -352,16 +363,14 @@ describe( 'SiteSettingsFormGeneral', () => {
 				},
 			};
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingsFormGeneral { ...testProps } />,
+				<SiteSettingPrivacyForm { ...testProps } />,
 				{
 					ui: {
 						selectedSiteId: 1234,
 					},
 				}
 			);
-			expect(
-				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
-			).toBe( 0 );
+
 			expect( container.querySelectorAll( '[name="blog_public"]' ).length ).toBe( 1 );
 
 			const discourageRadio = getByLabelText( 'Discourage search engines from indexing this site', {

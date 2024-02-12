@@ -708,14 +708,10 @@ export class SiteSettingsFormGeneral extends Component {
 			handleSubmitForm,
 			updateFields,
 			isAtomicAndEditingToolkitDeactivated,
-			isComingSoon,
 			isP2HubSite,
 			isRequestingSettings,
 			isSavingSettings,
-			isUnlaunchedSite: propsIsUnlaunchedSite,
-			siteId,
 			siteIsAtomic,
-			siteIsJetpack,
 			eventTracker,
 			trackEvent,
 		} = this.props;
@@ -726,17 +722,13 @@ export class SiteSettingsFormGeneral extends Component {
 
 		return (
 			<SiteSettingPrivacy
-				siteId={ siteId }
 				fields={ fields }
 				handleSubmitForm={ handleSubmitForm }
 				updateFields={ updateFields }
 				isAtomicAndEditingToolkitDeactivated={ isAtomicAndEditingToolkitDeactivated }
-				isComingSoon={ isComingSoon }
 				isRequestingSettings={ isRequestingSettings }
 				isSavingSettings={ isSavingSettings }
-				isUnlaunchedSite={ propsIsUnlaunchedSite }
 				siteIsAtomic={ siteIsAtomic }
-				siteIsJetpack={ siteIsJetpack }
 				eventTracker={ eventTracker }
 				trackEvent={ trackEvent }
 			/>
