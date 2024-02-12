@@ -707,11 +707,9 @@ export class SiteSettingsFormGeneral extends Component {
 			fields,
 			handleSubmitForm,
 			updateFields,
-			isAtomicAndEditingToolkitDeactivated,
 			isP2HubSite,
 			isRequestingSettings,
 			isSavingSettings,
-			siteIsAtomic,
 			eventTracker,
 			trackEvent,
 		} = this.props;
@@ -725,10 +723,8 @@ export class SiteSettingsFormGeneral extends Component {
 				fields={ fields }
 				handleSubmitForm={ handleSubmitForm }
 				updateFields={ updateFields }
-				isAtomicAndEditingToolkitDeactivated={ isAtomicAndEditingToolkitDeactivated }
 				isRequestingSettings={ isRequestingSettings }
 				isSavingSettings={ isSavingSettings }
-				siteIsAtomic={ siteIsAtomic }
 				eventTracker={ eventTracker }
 				trackEvent={ trackEvent }
 			/>

@@ -32,7 +32,6 @@ import timezonesReducer from 'calypso/state/timezones/reducer';
 import uiReducer from 'calypso/state/ui/reducer';
 import { renderWithProvider } from 'calypso/test-helpers/testing-library';
 import { SiteSettingsFormGeneral } from '../form-general';
-import SiteSettingPrivacy from '../site-setting-privacy';
 import SiteSettingPrivacyForm from '../site-setting-privacy/form';
 
 moment.tz = {
@@ -418,7 +417,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 			};
 
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingPrivacy { ...testProps } />
+				<SiteSettingPrivacyForm { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -445,7 +444,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 			};
 
 			const { container, getByLabelText } = renderWithRedux(
-				<SiteSettingPrivacy { ...testProps } />
+				<SiteSettingPrivacyForm { ...testProps } />
 			);
 			expect(
 				container.querySelectorAll( '.site-settings__general-settings-launch-site' ).length
@@ -740,7 +739,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 						},
 					};
 
-					const { getByLabelText } = renderWithRedux( <SiteSettingsFormGeneral { ...newProps } /> );
+					const { getByLabelText } = renderWithRedux( <SiteSettingPrivacyForm { ...newProps } /> );
 					const radioButtonComingSoon = getByLabelText( 'Coming soon', { exact: false } );
 					expect( radioButtonComingSoon ).not.toBeChecked();
 
@@ -757,7 +756,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 						},
 					};
 
-					const { getByLabelText } = renderWithRedux( <SiteSettingsFormGeneral { ...newProps } /> );
+					const { getByLabelText } = renderWithRedux( <SiteSettingPrivacyForm { ...newProps } /> );
 					const radioButtonComingSoon = getByLabelText( 'Coming soon', { exact: false } );
 					expect( radioButtonComingSoon ).toBeChecked();
 
@@ -776,7 +775,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 					};
 
 					const { getByLabelText, container } = renderWithRedux(
-						<SiteSettingsFormGeneral { ...newProps } />
+						<SiteSettingPrivacyForm { ...newProps } />
 					);
 					expect(
 						container.querySelector( '.site-settings__visibility-label.is-coming-soon' )
@@ -810,7 +809,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 					isAtomicAndEditingToolkitDeactivated: false,
 				};
 
-				const { container } = renderWithRedux( <SiteSettingPrivacy { ...newProps } /> );
+				const { container } = renderWithRedux( <SiteSettingPrivacyForm { ...newProps } /> );
 				expect(
 					container.querySelectorAll( '.site-settings__visibility-label.is-coming-soon' )
 				).toHaveLength( 1 );
@@ -822,7 +821,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 					isAtomicAndEditingToolkitDeactivated: true,
 				};
 
-				const { container } = renderWithRedux( <SiteSettingPrivacy { ...newProps } /> );
+				const { container } = renderWithRedux( <SiteSettingPrivacyForm { ...newProps } /> );
 				expect(
 					container.querySelectorAll( '.site-settings__visibility-label.is-coming-soon' )
 				).toHaveLength( 0 );
@@ -839,7 +838,7 @@ describe( 'SiteSettingsFormGeneral', () => {
 				};
 
 				const { container, getByLabelText } = renderWithRedux(
-					<SiteSettingPrivacy { ...newProps } />
+					<SiteSettingPrivacyForm { ...newProps } />
 				);
 				expect( container.querySelector( '.site-settings__visibility-label.is-coming-soon' ) ).toBe(
 					null
