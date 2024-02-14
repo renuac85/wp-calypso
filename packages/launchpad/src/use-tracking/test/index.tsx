@@ -2,6 +2,7 @@ import { recordTracksEvent } from '@automattic/calypso-analytics';
 import { renderHook } from '@testing-library/react';
 import { useTracking } from '..';
 import { buildTask } from '../../test/lib/fixtures';
+import type { SiteDetails } from '@automattic/data-stores';
 
 jest.mock( '@automattic/calypso-analytics' );
 
@@ -11,7 +12,7 @@ describe( 'useTracking', () => {
 	const buildDefaultProps = ( options = {} ) => ( {
 		checklistSlug: 'site-setup-checklist',
 		context: 'customer-home',
-		siteIntent: 'build',
+		site: { options: { site_intent: 'build' } } as SiteDetails,
 		tasks: [
 			buildTask( { id: 'task-1', completed: true } ),
 			buildTask( { id: 'task-2', completed: false } ),
@@ -24,13 +25,20 @@ describe( 'useTracking', () => {
 
 		expect( recordTracksEvent ).toHaveBeenCalledWith( 'calypso_launchpad_tasklist_viewed', {
 			checklist_slug: 'site-setup-checklist',
-			tasks: 'task-1,task-2',
+			tasks: ',task-1,task-2,',
 			is_completed: false,
 			number_of_steps: 2,
 			number_of_completed_steps: 1,
 			context: 'customer-home',
 			site_intent: 'build',
 		} );
+	} );
+
+	it( 'use comma as prefix and suffix for the task names to simplify queries on the logs tool', () => {
+		renderHook( () => useTracking( buildDefaultProps() ) );
+
+		const tasks = jest.mocked( recordTracksEvent ).mock.calls[ 0 ][ 1 ].tasks;
+		expect( tasks ).toBe( ',task-1,task-2,' );
 	} );
 
 	it( 'tracks the view event by task', () => {
@@ -61,6 +69,23 @@ describe( 'useTracking', () => {
 		expect( recordTracksEvent ).toHaveBeenCalledTimes( 3 );
 	} );
 
+	it( 'logs the load events only when the site info is available', () => {
+		const { rerender } = renderHook( ( site = null ) =>
+			useTracking( buildDefaultProps( { site } ) )
+		);
+
+		expect( recordTracksEvent ).toHaveBeenCalledTimes( 0 );
+
+		rerender( { options: { site_intent: 'some-site-intent' } } as SiteDetails );
+
+		expect( recordTracksEvent ).toHaveBeenCalledWith(
+			'calypso_launchpad_tasklist_viewed',
+			expect.objectContaining( {
+				site_intent: 'some-site-intent',
+			} )
+		);
+	} );
+
 	it( 'tracks the click event', () => {
 		const tasks = [
 			buildTask( { id: 'task-1', completed: true, order: 3 } ),
@@ -78,10 +103,7 @@ describe( 'useTracking', () => {
 			checklist_completed: false,
 			is_completed: false,
 			order: 4,
-			number_of_steps: 2,
-			number_of_completed_steps: 1,
 			context: 'customer-home',
-			site_intent: 'build',
 		} );
 	} );
 } );
