@@ -15,8 +15,6 @@ export interface LaunchpadInternalProps {
 	taskFilter?: ( tasks: Task[] ) => Task[];
 	useLaunchpadOptions?: UseLaunchpadOptions;
 	launchpadContext: string;
-	// Temporary flag to control the auto tracking of click events
-	enableAutoTracking?: boolean;
 }
 
 /**
@@ -32,7 +30,6 @@ const LaunchpadInternal = ( {
 	makeLastTaskPrimaryAction,
 	useLaunchpadOptions = {},
 	launchpadContext,
-	enableAutoTracking = false,
 }: LaunchpadInternalProps ) => {
 	const launchpadData = useLaunchpad(
 		siteSlug || '',
@@ -62,9 +59,7 @@ const LaunchpadInternal = ( {
 	} );
 
 	const itemClickHandler = ( task: Task ) => {
-		if ( enableAutoTracking ) {
-			trackTaskClick( task );
-		}
+		trackTaskClick( task );
 		task?.actionDispatch?.();
 	};
 
