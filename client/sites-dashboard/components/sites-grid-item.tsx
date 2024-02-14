@@ -46,6 +46,10 @@ const THUMBNAIL_DIMENSION = {
 	height: 401 / ASPECT_RATIO,
 };
 
+const wpAdminCss = css( {
+	whiteSpace: 'nowrap',
+} );
+
 const badges = css( {
 	display: 'flex',
 	gap: '8px',
@@ -72,7 +76,8 @@ export const siteThumbnail = css( {
 
 const SitesGridItemSecondary = styled.div( {
 	display: 'flex',
-	gap: '32px',
+	gap: '20px',
+	fontSize: '14px',
 	justifyContent: 'space-between',
 } );
 
@@ -117,7 +122,7 @@ export const SitesGridItem = memo( ( props: SitesGridItemProps ) => {
 	const translatedStatus = useSiteLaunchStatusLabel( site );
 	const isTrialSitePlan = useSelector( ( state ) => isTrialSite( state, site.ID ) );
 	const isAtomicSite = useSelector( ( state ) => isSiteAutomatedTransfer( state, site.ID ) );
-
+	const wpAdminUrl = getSiteWpAdminUrl( site );
 	const { ref, inView } = useInView( { triggerOnce: true } );
 
 	const ThumbnailWrapper = showThumbnailLink ? ThumbnailLink : 'div';
@@ -126,7 +131,7 @@ export const SitesGridItem = memo( ( props: SitesGridItemProps ) => {
 		? {
 				href:
 					isAtomicSite && siteDefaultInterface( site ) === 'wp-admin'
-						? getSiteWpAdminUrl( site ) || getDashboardUrl( site.slug )
+						? wpAdminUrl || getDashboardUrl( site.slug )
 						: getDashboardUrl( site.slug ),
 				title: __( 'Visit Dashboard' ),
 		  }
@@ -136,7 +141,6 @@ export const SitesGridItem = memo( ( props: SitesGridItemProps ) => {
 	if ( site.options?.is_redirect && site.options?.unmapped_url ) {
 		siteUrl = site.options?.unmapped_url;
 	}
-
 	return (
 		<SitesGridTile
 			ref={ ref }
@@ -198,13 +202,26 @@ export const SitesGridItem = memo( ( props: SitesGridItemProps ) => {
 						<Truncated>{ displaySiteUrl( siteUrl ) }</Truncated>
 					</SiteUrl>
 					<WithAtomicTransfer site={ site }>
-						{ ( result ) =>
-							result.wasTransferring ? (
-								<TransferNoticeWrapper { ...result } />
-							) : (
-								<>{ showLaunchNag && <SiteLaunchNag site={ site } /> }</>
-							)
-						}
+						{ ( result ) => {
+							if ( result.wasTransferring ) {
+								return <TransferNoticeWrapper { ...result } />;
+							} else if ( showLaunchNag && 'unlaunched' === site.launch_status ) {
+								return <SiteLaunchNag site={ site } />;
+							} else if ( site.is_wpcom_atomic ) {
+								return (
+									<a
+										href={ wpAdminUrl }
+										title={ __( 'Visit Wordpress Admin Dashboard' ) }
+										target="_blank"
+										rel="noreferrer"
+										className={ wpAdminCss }
+									>
+										{ __( 'WP Admin' ) }
+									</a>
+								);
+							}
+							return <></>;
+						} }
 					</WithAtomicTransfer>
 				</SitesGridItemSecondary>
 			}
