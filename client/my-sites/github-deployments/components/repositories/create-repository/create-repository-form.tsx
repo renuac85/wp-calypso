@@ -3,8 +3,8 @@ import { Button, FormToggle } from '@wordpress/components';
 import { useI18n } from '@wordpress/react-i18n';
 import { useState } from 'react';
 import FormFieldset from 'calypso/components/forms/form-fieldset';
-import FormRadiosBar from 'calypso/components/forms/form-radios-bar';
 import FormTextInput from 'calypso/components/forms/form-text-input';
+import { DeploymentStyle } from '../deployment-style';
 import { FormRadioWithTemplateSelect } from './form-radio-with-template-select';
 import './style.scss';
 
@@ -96,20 +96,7 @@ export const CreateRepositoryForm = ( { onRepositoryCreated }: CreateRepositoryF
 					{ __( 'Create repository' ) }
 				</Button>
 			</form>
-			<div className="deployment-style">
-				<h3 style={ { fontSize: '16px', marginBottom: '16px' } }>
-					{ __( 'Pick your deployment style' ) }
-				</h3>
-				<FormRadiosBar
-					items={ [
-						{ label: __( 'Simple' ), value: 'simple' },
-						{ label: __( 'Customizable' ), value: 'custom' },
-					] }
-					checked="simple"
-					onChange={ () => {} }
-					disabled={ false }
-				/>
-			</div>
+			<DeploymentStyle />
 		</div>
 	);
 };
