@@ -1165,6 +1165,7 @@ __metadata:
     "@automattic/components": "workspace:^"
     "@automattic/data-stores": "workspace:^"
     "@automattic/i18n-utils": "workspace:^"
+    "@storybook/addon-a11y": "npm:^7.6.15"
     "@storybook/cli": "npm:^7.6.13"
     "@storybook/react": "npm:^7.6.13"
     "@storybook/types": "npm:^7.6.8"
@@ -6207,6 +6208,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/addon-a11y@npm:^7.6.15":
+  version: 7.6.15
+  resolution: "@storybook/addon-a11y@npm:7.6.15"
+  dependencies:
+    "@storybook/addon-highlight": "npm:7.6.15"
+    axe-core: "npm:^4.2.0"
+  checksum: 767b5712ece24a32313189e761f423ec96dd61145def50fb35c92d2b26e860044c27bc290d54b0a532f682032f25ec245e893382fbbea02ba2b84664003ceaeb
+  languageName: node
+  linkType: hard
+
 "@storybook/addon-actions@npm:^7.6.10":
   version: 7.6.10
   resolution: "@storybook/addon-actions@npm:7.6.10"
@@ -6240,6 +6251,15 @@ __metadata:
     lodash: "npm:^4.17.21"
     ts-dedent: "npm:^2.0.0"
   checksum: 4af41964c74c8eeb2420a8922a1a2725efd7ea8d8a06a5c897885a3fc09cccaa05035738cff7089df352e345696ae6781ceef0e6e9626c749760bb2d5ad37513
+  languageName: node
+  linkType: hard
+
+"@storybook/addon-highlight@npm:7.6.15":
+  version: 7.6.15
+  resolution: "@storybook/addon-highlight@npm:7.6.15"
+  dependencies:
+    "@storybook/global": "npm:^5.0.0"
+  checksum: 8949b427c97268235bc9358940c430b6a6099843582a7f5dae196d400e85d5d63d834c56782587dd179ea8725d557275e7a0e15fce5ede66b12d59b894832f70
   languageName: node
   linkType: hard
 
@@ -11605,6 +11625,13 @@ __metadata:
   version: 4.7.0
   resolution: "axe-core@npm:4.7.0"
   checksum: 89ac5712b5932ac7d23398b4cb5ba081c394a086e343acc68ba49c83472706e18e0799804e8388c779dcdacc465377deb29f2714241d3fbb389cf3a6b275c9ba
+  languageName: node
+  linkType: hard
+
+"axe-core@npm:^4.2.0":
+  version: 4.8.4
+  resolution: "axe-core@npm:4.8.4"
+  checksum: 1100ac42c4b8cde1fb7c428d2b76e5a14e20d9d41fe635c55048e4ba27f1eded729b838379a036b5ef9cf25ba7f7bedeef01ebd3b4accd2afee397b10b0265c4
   languageName: node
   linkType: hard
 
