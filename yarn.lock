@@ -1166,7 +1166,6 @@ __metadata:
     "@storybook/addon-a11y": "npm:^7.6.15"
     "@storybook/cli": "npm:^7.6.13"
     "@storybook/react": "npm:^7.6.13"
-    "@storybook/types": "npm:^7.6.8"
     "@wordpress/components": "npm:^26.0.1"
     classnames: "npm:^2.3.2"
     msw: "npm:^2.1.7"
@@ -7254,7 +7253,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/types@npm:7.6.13, @storybook/types@npm:^7.6.8":
+"@storybook/types@npm:7.6.13":
   version: 7.6.13
   resolution: "@storybook/types@npm:7.6.13"
   dependencies:
